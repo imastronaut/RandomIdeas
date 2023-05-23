@@ -2,7 +2,11 @@
 
 var express = require('express');
 
+var path = require('path');
+
 var ideasRouter = require('./routes/idea.js');
+
+var cors = require('cors');
 
 require('dotenv').config();
 
@@ -11,7 +15,13 @@ var app = express();
 app.use(express.json());
 app.use(express.urlencoded({
   extended: false
+})); //cors middleware
+
+app.use(cors({
+  origin: ['http://localhost:5000', 'http://localhost:3000'],
+  credentials: true
 }));
+app.use(express["static"](path.join(__dirname, 'public')));
 
 var connectDB = require('./config/db');
 

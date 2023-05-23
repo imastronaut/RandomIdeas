@@ -137,13 +137,24 @@ router.post('/', function _callee3(req, res) {
   }, null, null, [[1, 8]]);
 });
 router.put('/:id', function _callee4(req, res) {
-  var updatedIdea;
+  var idea, updatedIdea;
   return regeneratorRuntime.async(function _callee4$(_context4) {
     while (1) {
       switch (_context4.prev = _context4.next) {
         case 0:
           _context4.prev = 0;
           _context4.next = 3;
+          return regeneratorRuntime.awrap(Idea.findById(req.params.id));
+
+        case 3:
+          idea = _context4.sent;
+
+          if (!(idea.username === req.body.username)) {
+            _context4.next = 9;
+            break;
+          }
+
+          _context4.next = 7;
           return regeneratorRuntime.awrap(Idea.findByIdAndUpdate(req.params.id, {
             $set: {
               text: req.body.text,
@@ -153,17 +164,23 @@ router.put('/:id', function _callee4(req, res) {
             "new": true
           }));
 
-        case 3:
+        case 7:
           updatedIdea = _context4.sent;
-          res.json({
+          return _context4.abrupt("return", res.json({
             success: true,
             data: updatedIdea
+          }));
+
+        case 9:
+          res.status(403).json({
+            success: false,
+            error: "You are not authorized to update this idea"
           });
-          _context4.next = 11;
+          _context4.next = 16;
           break;
 
-        case 7:
-          _context4.prev = 7;
+        case 12:
+          _context4.prev = 12;
           _context4.t0 = _context4["catch"](0);
           console.log(_context4.t0);
           res.status(500).json({
@@ -171,34 +188,51 @@ router.put('/:id', function _callee4(req, res) {
             error: "Something went wrong"
           });
 
-        case 11:
+        case 16:
         case "end":
           return _context4.stop();
       }
     }
-  }, null, null, [[0, 7]]);
+  }, null, null, [[0, 12]]);
 });
 router["delete"]('/:id', function _callee5(req, res) {
-  var idea;
+  var idea, deletedIdea;
   return regeneratorRuntime.async(function _callee5$(_context5) {
     while (1) {
       switch (_context5.prev = _context5.next) {
         case 0:
           _context5.prev = 0;
           _context5.next = 3;
-          return regeneratorRuntime.awrap(Idea.findByIdAndDelete(req.params.id));
+          return regeneratorRuntime.awrap(Idea.findById(req.params.id));
 
         case 3:
           idea = _context5.sent;
-          res.json({
-            success: true,
-            data: idea
-          });
-          _context5.next = 11;
-          break;
+
+          if (!(idea.username === req.body.username)) {
+            _context5.next = 9;
+            break;
+          }
+
+          _context5.next = 7;
+          return regeneratorRuntime.awrap(Idea.findByIdAndDelete(req.params.id));
 
         case 7:
-          _context5.prev = 7;
+          deletedIdea = _context5.sent;
+          return _context5.abrupt("return", res.json({
+            success: true,
+            data: deletedIdea
+          }));
+
+        case 9:
+          res.status(403).json({
+            success: false,
+            error: "You are not authroized to delete this idea"
+          });
+          _context5.next = 16;
+          break;
+
+        case 12:
+          _context5.prev = 12;
           _context5.t0 = _context5["catch"](0);
           console.log(_context5.t0);
           res.json({
@@ -206,12 +240,12 @@ router["delete"]('/:id', function _callee5(req, res) {
             error: "Something went wrong"
           });
 
-        case 11:
+        case 16:
         case "end":
           return _context5.stop();
       }
     }
-  }, null, null, [[0, 7]]);
+  }, null, null, [[0, 12]]);
 });
 module.exports = router;
 //# sourceMappingURL=idea.dev.js.map
